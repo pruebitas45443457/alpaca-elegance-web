@@ -1,101 +1,132 @@
 
 import { useState, useEffect } from 'react';
-import { Star, MapPin, ShoppingBag, CheckCircle } from 'lucide-react';
+import { CheckCircle, ShoppingBag } from 'lucide-react';
 
 const SocialProof = () => {
-  const [currentNotification, setCurrentNotification] = useState(0);
-  const [showNotification, setShowNotification] = useState(true);
+  const [notifications, setNotifications] = useState<Array<{
+    id: number;
+    message: string;
+    time: string;
+    location: string;
+    visible: boolean;
+  }>>([]);
 
-  const notifications = [
-    {
-      name: "María García",
-      location: "Madrid, España",
-      product: "Alpaca Fur Rug",
-      time: "2 min",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?auto=format&fit=crop&w=150&q=80"
-    },
-    {
-      name: "James Wilson", 
-      location: "London, UK",
-      product: "Baby Alpaca Scarf",
-      time: "5 min",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80"
-    },
-    {
-      name: "Sofia Andersson",
-      location: "Stockholm, Sweden", 
-      product: "Alpaca Sweater",
-      time: "8 min",
-      avatar: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?auto=format&fit=crop&w=150&q=80"
-    },
-    {
-      name: "Carlos Mendoza",
-      location: "Buenos Aires, Argentina",
-      product: "Alpaca Teddy Bear",
-      time: "12 min",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
-    }
+  const products = [
+    "Baby Alpaca Fur Rugs",
+    "Baby Alpaca Fur Bedspreads", 
+    "Baby Alpaca Fur Garments",
+    "Baby Alpaca Fashionable Fur Handbags",
+    "Adorable Alpaca Teddy Bears",
+    "Luxury Baby Alpaca Fur Trim Clothes",
+    "Baby Alpaca Tanned Hides",
+    "Baby Alpaca Fur Slippers"
+  ];
+
+  const locations = [
+    "New York, USA", "London, UK", "Tokyo, Japan", "Paris, France",
+    "Sydney, Australia", "Toronto, Canada", "Berlin, Germany", "Madrid, Spain",
+    "Rome, Italy", "Amsterdam, Netherlands", "Stockholm, Sweden", "Oslo, Norway"
+  ];
+
+  const names = [
+    "Maria", "John", "Sarah", "Carlos", "Emma", "David", "Ana", "Michael",
+    "Isabella", "James", "Sofia", "Robert", "Carmen", "William", "Lucia"
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setShowNotification(false);
-      setTimeout(() => {
-        setCurrentNotification((prev) => (prev + 1) % notifications.length);
-        setShowNotification(true);
-      }, 500);
-    }, 8000);
+    const showNotification = () => {
+      const randomProduct = products[Math.floor(Math.random() * products.length)];
+      const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+      const randomName = names[Math.floor(Math.random() * names.length)];
+      const timeAgo = Math.floor(Math.random() * 30) + 1;
+      
+      const newNotification = {
+        id: Date.now(),
+        message: `${randomName} just purchased ${randomProduct}`,
+        time: `${timeAgo} min ago`,
+        location: randomLocation,
+        visible: true
+      };
 
-    return () => clearInterval(interval);
+      setNotifications(prev => {
+        const updated = [newNotification, ...prev.slice(0, 2)];
+        return updated;
+      });
+
+      // Hide notification after 6 seconds
+      setTimeout(() => {
+        setNotifications(prev => 
+          prev.map(notif => 
+            notif.id === newNotification.id 
+              ? { ...notif, visible: false }
+              : notif
+          )
+        );
+      }, 6000);
+
+      // Remove notification after fade out
+      setTimeout(() => {
+        setNotifications(prev => 
+          prev.filter(notif => notif.id !== newNotification.id)
+        );
+      }, 7000);
+    };
+
+    // Show first notification after 3 seconds
+    const initialTimer = setTimeout(showNotification, 3000);
+    
+    // Then show notifications every 8-15 seconds
+    const interval = setInterval(() => {
+      showNotification();
+    }, Math.random() * 7000 + 8000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, []);
 
   return (
-    <div className="fixed bottom-6 left-6 z-40 max-w-sm">
-      <div className={`transition-all duration-500 transform ${
-        showNotification ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-      }`}>
-        <div className="glass-morphism rounded-2xl p-4 premium-shadow">
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <img
-                src={notifications[currentNotification].avatar}
-                alt={notifications[currentNotification].name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                <CheckCircle className="w-2.5 h-2.5 text-white" />
+    <div className="fixed bottom-6 left-6 z-50 space-y-3 max-w-sm">
+      {notifications.map((notification) => (
+        <div
+          key={notification.id}
+          className={`glass-morphism border border-white/20 rounded-lg p-4 shadow-2xl transform transition-all duration-700 ${
+            notification.visible 
+              ? 'translate-x-0 opacity-100 scale-100' 
+              : '-translate-x-full opacity-0 scale-95'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-5 h-5 text-white" />
               </div>
             </div>
             
             <div className="flex-1 min-w-0">
-              <div className="flex items-center space-x-1 mb-1">
-                <span className="font-semibold text-white text-sm truncate">
-                  {notifications[currentNotification].name}
+              <div className="flex items-center gap-2 mb-1">
+                <ShoppingBag className="w-4 h-4 text-white" />
+                <span className="text-xs font-medium text-green-400 uppercase tracking-wide">
+                  Nueva Venta
                 </span>
-                <div className="flex space-x-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
               </div>
               
-              <div className="flex items-center space-x-1 text-xs text-white/80 mb-1">
-                <MapPin className="w-3 h-3" />
-                <span className="truncate">{notifications[currentNotification].location}</span>
-              </div>
+              <p className="text-sm font-medium text-white leading-tight mb-2">
+                {notification.message}
+              </p>
               
-              <div className="flex items-center space-x-1 text-xs text-white/90">
-                <ShoppingBag className="w-3 h-3" />
-                <span className="truncate">Compró: {notifications[currentNotification].product}</span>
+              <div className="flex items-center justify-between text-xs text-white/70">
+                <span>{notification.time}</span>  
+                <span>{notification.location}</span>
               </div>
-            </div>
-            
-            <div className="text-xs text-white/60">
-              {notifications[currentNotification].time}
             </div>
           </div>
+          
+          {/* Pulse effect */}
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };

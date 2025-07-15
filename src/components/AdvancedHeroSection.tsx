@@ -12,21 +12,21 @@ const AdvancedHeroSection = () => {
     {
       title: "WELCOME TO CUSCO STORES",
       subtitle: "Your Baby Alpaca Products Manufacturer and Exporter Company since 2007, from Cusco PERU",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80",
+      image: "/lovable-uploads/80da382c-7d5b-4131-a7b3-2c38b603c625.png",
       overlay: "from-black/80 via-black/60 to-black/40",
       effect: "premium"
     },
     {
       title: "PREMIUM BABY ALPACA",
       subtitle: "Cusco Stores is your wholesale suppliers of all kinds of baby alpaca products made in fabric, fiber, yarn, fur or mixed with them",
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=1920&q=80",
+      image: "/lovable-uploads/35a34a5f-932a-4657-844f-8305d856b578.png",
       overlay: "from-black/70 via-black/50 to-black/30",
       effect: "luxury"
     },
     {
       title: "ARTISAN CRAFTSMANSHIP",
-      subtitle: "17+ years of excellence in creating the finest alpaca products with traditional Peruvian techniques",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1920&q=80",
+      subtitle: "17+ years of excellence creating the finest alpaca products with traditional Peruvian techniques",
+      image: "/lovable-uploads/cdb5dbdf-a66d-4f41-86b9-785d0eac2581.png",
       overlay: "from-black/75 via-black/55 to-black/35",
       effect: "exclusive"
     }
